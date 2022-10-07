@@ -1,7 +1,7 @@
 const regForm = document.querySelector('#regForm');
 
-const validateText = (id) => {
-  const input = document.getElementById(id)
+const validateText = (input) => {
+  // const input = document.getElementById(id)
 
   if(input.value.trim() === '') {
     return setError(input, 'Du måste ange ett namn')
@@ -14,8 +14,8 @@ const validateText = (id) => {
   return setSuccess(input)
 }
 
-const validateEmail = (id) => {
-  const input = document.getElementById(id)
+const validateEmail = (input) => {
+  // const input = document.getElementById(id)
 
   const regEx = /^[\w-]+(\.[\w\-]+)*@([A-Za-z0-9-]+\.)+[A-Za-z]{2,6}$/
 
@@ -26,8 +26,8 @@ const validateEmail = (id) => {
   return setSuccess(input)
 }
 
-const validateCheck = (id) => {
-  const checkbox = document.getElementById(id);
+const validateCheck = (checkbox) => {
+  // const checkbox = document.getElementById(id);
 
   if(!checkbox.checked) {
     return setError(checkbox, 'you need to accept the terms')
@@ -54,6 +54,14 @@ const setSuccess = (input) => {
   return true
 }
 
+const validate = (input) => {
+  switch(input.type) {
+    case 'text':  return validateText(input)
+    case 'email': return validateEmail(input)
+    case 'checkbox': return validateCheck(input)
+    default: break;
+  }
+}
 
 regForm.addEventListener('submit', function(e) {
   e.preventDefault();
@@ -72,14 +80,38 @@ regForm.addEventListener('submit', function(e) {
 
   // validateFirstName()
   // validateLastName()
-  validateCheck('terms')
-  validateEmail('email')
-  validateText('lastName')
-  validateText('firstName')
+  // validateCheck('terms')
+  // validateEmail('email')
+  // validateText('lastName')
+  // validateText('firstName')
 
-  if(validateText('firstName')) {
-    console.log('validering klar')
+
+  // if(validateCheck('terms') &&
+  // validateEmail('email') &&
+  // validateText('lastName') &&
+  // validateText('firstName')) {
+  //   console.log('validering ok!')
+  // }
+  // else {
+  //   console.log('någonting är fel')
+  // }
+
+
+  const errors = [];
+  for(let i = 0; i < regForm.length; i++) {
+    errors[i] = validate(regForm[i])
+  }
+  // console.log(errors)
+  if(errors.includes(false)) return
+
+
+  const user = {
+    id: Date.now().toString(),
+    firstName: this.firstName.value,
+    lastName: this.lastName.value,
+    email: this.email.value
   }
 
+  console.log(user)
 
 })
