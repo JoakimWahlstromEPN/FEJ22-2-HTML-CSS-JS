@@ -88,12 +88,74 @@ const doStuff = (value) => {
 
 
 
-getRequest('user.json')
-  .then(data => {
+// getRequest('user.json')
+//   .then(data => {
+//     console.log(data)
+//     return getRequest('todos.json')
+//   })
+//   .then(todos => {
+//     console.log(todos)
+//   })
+//   .catch(err => console.log(err))
+
+
+
+//FETCH
+
+// fetch('user.json')
+//   .then(res => {
+//     return res.json()
+//   })
+//   .then(data => {
+//     console.log(data)
+//     return fetch('todos.json')
+//   })
+//   .then(res => {
+//     return res.json()
+//   })
+//   .then(todos => {
+//     console.log(todos)
+//   })
+//   .catch(err => {
+//     console.log(err)
+//   })
+
+
+
+
+// ASYNC AWAIT
+
+// const getJson = async (url) => {
+//   const res = await fetch(url)
+
+//   if(res.status !== 200) {
+//     throw new Error('cant fetch the data')
+//   }
+
+//   const data = await res.json()
+//   console.log(data)
+//   // return data
+// }
+
+// getJson('user.json')
+  // .then(data => {
+  //   console.log(data)
+  // })
+  // .catch(err => {
+  //   console.log(err.message)
+  // })
+
+  const output = document.querySelector('#output')
+
+  const getTodos = async () => {
+    const res = await fetch('todos.json')
+    const data = await res.json()
+
     console.log(data)
-    return getRequest('todos.json')
-  })
-  .then(todos => {
-    console.log(todos)
-  })
-  .catch(err => console.log(err))
+    data.forEach(todo => {
+      // output.innerHTML += `<p>${todo.title}</p>`
+      output.insertAdjacentHTML('beforeend', `<p>${todo.title}</p>`)
+    })
+  }
+
+  getTodos()
