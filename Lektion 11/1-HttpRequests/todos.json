@@ -1,0 +1,17 @@
+[
+  {
+    "id": 1,
+    "title": "Städa",
+    "completed": false
+  },
+  {
+    "id": 2,
+    "title": "Gå ut med soporna",
+    "completed": false
+  },
+  {
+    "id": 3,
+    "title": "Laga mat",
+    "completed": false
+  }
+]
