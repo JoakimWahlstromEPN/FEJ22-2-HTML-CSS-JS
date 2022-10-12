@@ -1,6 +1,14 @@
+/*
+  C - Create
+  R - Read
+  U - Update
+  D - Delete
+*/
+
 const output = document.querySelector('#output');
 const form = document.querySelector('#todoForm');
 const input = document.querySelector('#todoInput');
+const error = document.querySelector('#error');
 
 const todos = [];
 
@@ -14,6 +22,7 @@ const fetchTodos = async () => {
 fetchTodos()
 
 const listTodos = () => {
+  output.innerHTML = ''
   todos.forEach(todo => {
     output.appendChild(createTodoElement(todo))
   })
@@ -27,6 +36,11 @@ const createTodoElement = todo => {
   let title = document.createElement('p');
   title.classList.add('todo-title');
   title.innerText = todo.title;
+  if(todo.completed) {
+    title.classList.add('completed')
+  }
+
+  title.addEventListener('click', () => {toggleComplete(todo, title)})
 
   let button = document.createElement('button');
 
@@ -38,15 +52,54 @@ const createTodoElement = todo => {
   todoDiv.appendChild(title);
   todoDiv.appendChild(button);
 
-  button.addEventListener('click', () => {removeTodo(todo.id, todoDiv)})
+  button.addEventListener('click', () => {removeTodo(todo, todoDiv)})
 
   return todoDiv;
 }
 
-const removeTodo = (id, todoElement) => {
- 
+const toggleComplete = (todo, title) => {
+  fetch('https://jsonplaceholder.typicode.com/todos/' + todo.id, {
+    method: 'PATCH',
+    headers: {
+      'Content-type': 'application/json; charset=UTF-8'
+    },
+    body: JSON.stringify({
+      completed: !todo.completed
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    todo.completed = data.completed
+    // title.classList.toggle('completed')
+    listTodos()
+  })
 }
 
+const removeTodo = (todo, todoElement) => {
+  if(!todo.completed) {
+    setError('you need to complete the todo first')
+    return
+  }
+
+  setSuccess()
+
+  fetch('https://jsonplaceholder.typicode.com/todos/' + todo.id, {
+    method: 'DELETE'
+  })
+  .then(res => {
+    console.log(res)
+    if(!res.ok) {
+      setError('Something went wrong!')
+      return
+    }
+
+    // todos = todos.filter(todo => todo.id !== id)
+    todos.splice(todos.findIndex(_todo => _todo.id === todo.id), 1)
+    listTodos();
+    // todoElement.remove();
+
+  })
+}
 
 const addTodo = title => {
   fetch('https://jsonplaceholder.typicode.com/todos', {
@@ -61,34 +114,37 @@ const addTodo = title => {
   })
   .then(res => res.json())
   .then(data => {
-    console.log(data)
+    // genera ett unikt id - behövs bara nu då vi får tillbaka id:201 på alla todos som vi skapar
+    data.id = Date.now()
+
+    todos.push(data)
+    // listTodos()
+    output.appendChild(createTodoElement(data))
   })
 
+}
+
+const setError = (message) => {
+  error.classList.remove('d-none')
+  error.innerText = message
+}
+const setSuccess = () => {
+  error.classList.add('d-none')
 }
 
 form.addEventListener('submit', e => {
   e.preventDefault();
 
   if(input.value.trim() === '') {
-    // TODO: display error message
+    setError('You need to enter what todo')
     return
   }
 
+  setSuccess()
   addTodo(input.value)
-
+  input.value = ''
+  input.focus()
 })
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

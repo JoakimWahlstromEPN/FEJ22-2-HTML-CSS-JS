@@ -91,6 +91,11 @@ body * {
 .todo-title {
   font-size: 1.3rem;
   font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+}
+.todo-title:hover {
+  color: #cdcdcd;
 }
 .todo button {
   background-color: firebrick;
@@ -106,6 +111,19 @@ body * {
 }
 .todo button:active {
   background-color: hsl(0, 68%, 25%);
+}
+
+.completed {
+  color: #a7a7a7;
+  text-decoration: line-through;
+}
+.error {
+  text-align: center;
+  margin-bottom: .5rem;
+  color: firebrick;
+}
+.d-none {
+  display: none;
 }
 
 /* width */
