@@ -70,6 +70,8 @@ class Person {
     const parts = value.split(' ')
     this.firstName = parts[0]
     this.lastName = parts[1]
+
+    document.body.innerText = `${this.firstName} ${this.lastName}`
   }
 
   get id() {
@@ -94,3 +96,4 @@ console.log(p1.fullName)
 p1.id = 12345
 console.log(p1)
 console.log(p1.id)
+
